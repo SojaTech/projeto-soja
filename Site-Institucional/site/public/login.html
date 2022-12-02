@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SojaTech | Login</title>
+
+    <script src="./js/funcoes.js"></script>
+
+    <link rel="icon" href="./assets/icon/logo-soja.ico">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!--Header-->
+
+    <div class="header">
+        <div class="container">
+            <a href="./index.html"><h1 class="titulo">SojaTech</h1></a>
+            <ul class="navbar">
+                <a href="./quem_somos.html">
+                    <li class="agora">Sobre nós</li>
+                </a>
+                <li>
+                    <a href="./simulador.html">Simulador</a>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="./login.html">Login</a>
+                </li>
+                <li>
+                    <a href="./cadastro.html">Cadastro</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<!-- 
+    <div class="banner">
+        <div class="alerta_erro">
+            <div class="card_erro" id="cardErro">
+                <span id="mensagem_erro"></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h2>Olá de volta!</h2>
+                <div class="formulario">
+
+
+                    <span class="tipo_campo">E-mail:</span>
+                    <input id="email_input" type="text" placeholder="Login">
+
+                    <span class="tipo_campo">Senha:</span>
+                    <input id="senha_input" type="password" placeholder="******">
+
+                    <button class="btn" onclick="entrar()">Entrar</button>
+
+
+                </div>
+
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif">
+                </div>
+
+                <div id="div_erros_login">
+
+                </div>
+            </div>
+        </div>
+    </div> 
+-->
+
+    <div class="corpo">
+        <div class="main">
+            <div class="form-img-login"></div>
+    
+            <div class="form-container-login">
+                <div class="form-header">
+                    <h3>Bem-vindo!</h3>
+                    <h3>Faça o seu Login:</h3>
+                </div>
+                <form>
+                    <input id="email_input" placeholder="Digite seu Email" />
+                    <input id="senha_input" placeholder="Digite sua Senha" type="password" />
+                    <button type="submit" form="form" value="Submit" onclick="entrar()">Continuar</button>
+                </form>
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+    
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif">
+                </div>
+    
+                <div class="mensagem-erro" id="mensagemErro">
+                    <div id="cardErro">
+                        <span id="mensagem_erro"></span>
+                        <div id="div_erros_login"></div>
+                    </div>
+                    <div id="cardErro2">
+                        <div id="div_erros_login"></div>
+                        <span id="mensagem_erro2"></span>
+                    </div>
+                </div>
+            </div>
+    
+    
+        </div>
+    </div>
+
+
+    <!--footer inicio-->
+    <footer>
+        <div class="foot">
+            <div class="contato">
+                <div class="c">
+                    Atendimentos detalhados: <br>
+                    &phone; (11) 96077-1918 - segunda a sábado - 8:00 às 18:00 <br><br>
+                    Inscreva-se para receber nossas novidades:
+                </div>
+                <div class="b">
+                    <input type="email" placeholder="example@email.com" id="in_newsletter">
+                </div>
+                <div class="input">
+                    &SmallCircle; FAQ -
+                     Tire suas dúvidas<br><br>
+                    &SmallCircle; Atendimento ao Cliente <br><br>
+                    &SmallCircle; Atendimento Técnico: support@sojatech.zohodesk.com
+                </div>
+                <div class="imagens">
+                    Rua. Haddock Lobo, 545 - São Paulo, SP <br><br><br>
+                    <img src="./assets/imgs/instagram.png" class="redes"> <br>
+                    <img src="./assets/imgs/facebook.png" class="redes"> <br>
+                </div>
+            </div>
+            <div class="img">
+                Propriedade SOJATECH. Todos os direitos reservados. SojaTech &copy; 2022
+            </div>
+        </div>
+        
+    </footer>
+    <!--footer fim-->
+
+</body>
+
+</html>
+
+<script>
+
+
+    function entrar() {
+        aguardar();
+
+        var emailVar = email_input.value;
+        var senhaVar = senha_input.value;
+        var idUsuario = sessionStorage.getItem('ID_USUARIO') 
+
+        if (emailVar == "" || senhaVar == "") {
+            cardErro.style.display = "block"
+            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+            finalizarAguardar();
+            return false;
+        }
+        else {
+            setInterval(sumirMensagem, 5000)
+        }
+
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+
+                    setTimeout(function () {
+                        window.location = "./dashboard/cards.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+    function sumirMensagem() {
+        cardErro.style.display = "none"
+    }
+
+</script>
